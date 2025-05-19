@@ -2,6 +2,8 @@
 // import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import { Link, usePage } from '@inertiajs/vue3';
 const user = usePage().props.auth?.user
+console.log(user);
+
 // import FooterLayout from "../Layouts/FooterLayout.vue"
 </script>
 
@@ -64,7 +66,7 @@ const user = usePage().props.auth?.user
                                 class="flex flex-col items-start justify-end w-full pt-4 md:items-center md:w-1/3 md:flex-row md:py-0">
                                 <Link href="/logout"
                                     class="w-full px-6 py-2 mr-0 text-gray-700 md:px-3 md:mr-2 lg:mr-3 md:w-auto" method="post">Log Out</Link>
-                                <a :href="user.is_admin ? '/admin/dashboard' : '/customer/dashboard'"
+                                <a :href="user.role==='admin' ? '/admin/dashboard' : '/customer/dashboard'"
                                     class="inline-flex items-center w-full px-5 px-6 py-3 text-sm font-medium leading-4 text-white bg-gray-900 md:w-auto md:rounded-full hover:bg-gray-800 focus:outline-none md:focus:ring-2 focus:ring-0 focus:ring-offset-2 focus:ring-gray-800">Dashboard</a>
                             </div>
                         </div>

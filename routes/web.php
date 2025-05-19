@@ -23,6 +23,8 @@ Route::get('/contact', function () {
 Route::get('/rentals', function () {
     return Inertia::render('Rentals');
 });
+Route::get('/rentals', [PageController::class, 'SearchRentals']);
+Route::post('/rentals', [PageController::class, 'SearchRentals']);
 
 
 Route::middleware(['auth', 'admin'])->group(function () {

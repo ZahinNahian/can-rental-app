@@ -16,6 +16,37 @@ class PageController extends Controller
         return Inertia::render("Home", ["cars"=>$cars]);
     }
 
+public function SearchRentals(Request $request)
+{
+    $validated = $request->validate([
+        'car_type' => 'nullable|string',
+        'brand' => 'nullable|string',
+        'daily_rent_price' => 'nullable|numeric',
+    ]);
+
+    $cars = Car::query()
+        ->where('availability', 1) // only available cars
+        ->when($validated['car_type'] ?? false, function ($query, $carType) {
+            $query->where('car_type', $carType);
+        })
+        ->when($validated['brand'] ?? false, function ($query, $brand) {
+            $query->where('brand', $brand);
+        })
+        ->when($validated['daily_rent_price'] ?? false, function ($query, $price) {
+            $query->where('daily_rent_price', '<=', $price);
+        })
+        ->latest()
+        ->paginate(6)
+        ->withQueryString();
+
+    return Inertia::render('Rentals', [
+        'cars' => $cars,
+        'filters' => $validated,
+        'allCarTypes' => Car::select('car_type')->distinct()->pluck('car_type'),
+        'allBrands' => Car::select('brand')->distinct()->pluck('brand'),
+    ]);
+}
+
     public function AdminDashBoardPage() {
         $totalcars=Car::count();
         $availablecars=Car::where('availability','1')->count();
